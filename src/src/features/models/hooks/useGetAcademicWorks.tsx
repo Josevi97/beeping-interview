@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { AcademicWork } from "../academic_work";
+import type { PageResource } from "../../../../types/page_resource";
 
 const url = "https://api.openalex.org/works";
 
@@ -14,17 +15,17 @@ const useGetAcademicWorks = () => {
       }
 
       const json = await response.json();
-      if (json["results"]) {
-        const data = json["results"] as AcademicWork[];
+      if (json["results"] == null) return null;
 
-        return {
-          page,
-          next_page: data.length > 0 ? page + 1 : undefined,
-          data,
-        };
-      }
+      const data = json["results"] as AcademicWork[];
 
-      return null;
+      const resource: PageResource<AcademicWork> = {
+        page,
+        next_page: data.length > 0 ? page + 1 : null,
+        data,
+      };
+
+      return resource;
     },
     getNextPageParam: (lastGroup) => lastGroup?.next_page,
     initialPageParam: 1,
