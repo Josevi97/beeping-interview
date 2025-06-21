@@ -23,13 +23,20 @@ type Column<T> = {
 
 type InfiniteTableProps<T> = {
   data?: InfiniteData<PageResource<T> | null>;
+  threshold?: number;
+  overscan?: number;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   columns: Column<T>[];
   requestNext(): void;
 };
 
-const InfiniteTable = <T,>({ data, ...props }: InfiniteTableProps<T>) => {
+const InfiniteTable = <T,>({
+  data,
+  threshold = 1,
+  overscan = 5,
+  ...props
+}: InfiniteTableProps<T>) => {
   const helper = createColumnHelper<T>();
 
   const allRows = data
@@ -56,7 +63,7 @@ const InfiniteTable = <T,>({ data, ...props }: InfiniteTableProps<T>) => {
   const rowVirtualizer = useWindowVirtualizer({
     count: props.hasNextPage ? allRows.length + 1 : allRows.length,
     estimateSize: () => 24,
-    overscan: 5,
+    overscan: overscan,
   });
 
   useEffect(() => {
@@ -67,7 +74,7 @@ const InfiniteTable = <T,>({ data, ...props }: InfiniteTableProps<T>) => {
     }
 
     if (
-      lastItem.index >= allRows.length - 1 &&
+      lastItem.index >= allRows.length - threshold &&
       props.hasNextPage &&
       !props.isFetchingNextPage
     ) {
