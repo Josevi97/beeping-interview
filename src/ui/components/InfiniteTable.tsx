@@ -1,7 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import Table from "./Table";
 import TableHeader from "./TableHeader";
-import TBody from "./TBody";
 import LoadingRow from "./LoadingRow";
 import TableRow from "./TableRow";
 import type { InfiniteData } from "@tanstack/react-query";
@@ -12,8 +11,9 @@ import {
   useReactTable,
   type AccessorFn,
 } from "@tanstack/react-table";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { useEffect, useMemo } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useEffect, useMemo, useRef } from "react";
+import TBody from "./TBody";
 
 type Column<T> = {
   key: AccessorFn<T>;
@@ -37,6 +37,8 @@ const InfiniteTable = <T,>({
   overscan = 5,
   ...props
 }: InfiniteTableProps<T>) => {
+  const bodyRef = useRef<HTMLTableSectionElement>(null);
+
   const helper = createColumnHelper<T>();
 
   const allRows = data
@@ -60,8 +62,9 @@ const InfiniteTable = <T,>({
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const rowVirtualizer = useWindowVirtualizer({
+  const rowVirtualizer = useVirtualizer({
     count: props.hasNextPage ? allRows.length + 1 : allRows.length,
+    getScrollElement: () => bodyRef.current,
     estimateSize: () => 24,
     overscan: overscan,
   });
@@ -89,9 +92,9 @@ const InfiniteTable = <T,>({
   ]);
 
   return (
-    <Table>
+    <Table className="h-screen flex flex-col">
       <TableHeader table={table} />
-      <TBody style={{ height: rowVirtualizer.getTotalSize() }}>
+      <TBody ref={bodyRef} className="relative overflow-y-auto flex-grow">
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const isLoaderRow = virtualRow.index > allRows.length - 1;
 

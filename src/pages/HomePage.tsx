@@ -8,8 +8,8 @@ const HomePage = () => {
   return (
     <InfiniteTable
       data={data}
-      threshold={50}
-      overscan={50}
+      threshold={20}
+      overscan={25}
       columns={[
         {
           key: (row) => row.title,
