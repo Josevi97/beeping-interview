@@ -13,8 +13,14 @@ const TableHeader = <T,>({ table }: TableHeaderProps<T>) => {
       {table.getHeaderGroups().map((headerGroup) => (
         <TRow key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <THeader key={header.id} onClick={() => {}}>
+            <THeader
+              key={header.id}
+              onClick={header.column.getToggleSortingHandler()}
+            >
               {flexRender(header.column.columnDef.header, header.getContext())}
+              {header.column.getIsSorted() === "asc" && <>↑</>}
+              {header.column.getIsSorted() === "desc" && <>↓</>}
+              {header.column.getIsSorted() === false && <>⇅</>}
             </THeader>
           ))}
         </TRow>

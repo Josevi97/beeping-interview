@@ -1,15 +1,27 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { AcademicWork } from "../academic_work";
-import type { PageResource } from "../../../types/page_resource";
+import type { PageResource } from "../../../types/pagination/page_resource";
+import type { SortingState } from "../../../types/pagination/sorting_state";
+import QueryBuilder from "../../../utils/QueryBuilder";
 
-const url = "https://api.openalex.org/works";
+type UseGetAcademicWorksProps = {
+  sorting?: SortingState;
+};
 
-const useGetAcademicWorks = () => {
+/**
+ * Hook to get an infinite query for AcademicWorks
+ *
+ * @param props gets the sorting and filters if required
+ * @returns ReactQuery infinite query
+ */
+const useGetAcademicWorks = ({ sorting }: UseGetAcademicWorksProps = {}) => {
   return useInfiniteQuery({
-    queryKey: ["works"],
+    queryKey: ["works", { sorting }],
     queryFn: async (ctx) => {
       const page = ctx.pageParam ?? 1;
-      const response = await fetch(`${url}?page=${page}`);
+      const query = QueryBuilder.build({ page, sorting });
+      const response = await fetch(query);
+
       if (!response.ok) {
         throw new Error(`Response status: ${response.status}`);
       }

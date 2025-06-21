@@ -1,9 +1,13 @@
+import { useState } from "react";
 import useGetAcademicWorks from "../features/models/hooks/useGetAcademicWorks";
 import InfiniteTable from "../ui/components/InfiniteTable";
+import type { SortingState } from "../types/pagination/sorting_state";
 
 const HomePage = () => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
-    useGetAcademicWorks();
+    useGetAcademicWorks({ sorting });
 
   return (
     <InfiniteTable
@@ -11,6 +15,7 @@ const HomePage = () => {
       data={data}
       threshold={20}
       overscan={25}
+      onSortingChanged={setSorting}
       columns={[
         {
           key: (row) => row.title,
