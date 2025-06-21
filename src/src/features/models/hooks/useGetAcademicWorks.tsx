@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import type { AcademicWork } from "../academic_work";
 
 const url = "https://api.openalex.org/works";
 
@@ -14,7 +15,7 @@ const useGetAcademicWorks = () => {
 
       const json = await response.json();
       if (json["results"]) {
-        const data = json["results"];
+        const data = json["results"] as AcademicWork[];
 
         return {
           page,

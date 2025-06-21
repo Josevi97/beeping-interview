@@ -3,12 +3,13 @@ import { forwardRef } from "react";
 
 type RowProps<T> = {
   row: R<T>;
+  style: any;
 };
 
 function createRowComponent<T>() {
-  return forwardRef<HTMLTableRowElement, RowProps<T>>(({ row }, ref) => {
+  return forwardRef<HTMLTableRowElement, RowProps<T>>(({ row, style }, ref) => {
     return (
-      <tr ref={ref} id={row.id}>
+      <tr ref={ref} id={row.id} style={style}>
         {row.getVisibleCells().map((cell) => (
           <td key={cell.id}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -5,13 +5,12 @@ import {
 } from "@tanstack/react-table";
 import Table from "../ui/components/Table";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import THead from "../ui/components/THead";
+import { Fragment, useEffect } from "react";
 import TBody from "../ui/components/TBody";
 import Row from "../ui/components/Row";
 import type { AcademicWork } from "../features/models/academic_work";
 import useGetAcademicWorks from "../features/models/hooks/useGetAcademicWorks";
-import { useIntersectionObserver } from "react-intersection-observer-hook";
+import LoadingRow from "../ui/components/LoadingRow";
 
 const helper = createColumnHelper<AcademicWork>();
 const columns = [
@@ -38,45 +37,69 @@ const HomePage = () => {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useGetAcademicWorks();
 
+  const allRows = data
+    ? data.pages.filter((p) => p?.data).flatMap((p) => p!.data)
+    : [];
+
   const table = useReactTable({
-    data: data?.pages.map((page) => page?.data).flat() || [],
+    data: allRows,
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const virtualRows = useWindowVirtualizer({
-    count: table.getRowModel().rows.length,
+  const rowVirtualizer = useWindowVirtualizer({
+    count: hasNextPage ? allRows.length + 1 : allRows.length,
     estimateSize: () => 24,
     overscan: 5,
   });
 
-  const virtualItems = useMemo(
-    () => virtualRows.getVirtualItems(),
-    [virtualRows, data],
-  );
-
-  const [ref, { entry }] = useIntersectionObserver();
-
-  const threshold = useMemo(
-    () => Math.max(table.getRowModel().rows.length - 5, 0),
-    [table.getRowModel().rows.length],
-  );
-
   useEffect(() => {
-    const isVisible = entry && entry.isIntersecting;
-    if (isVisible && hasNextPage && !isFetchingNextPage) {
+    const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
+
+    if (!lastItem) {
+      return;
+    }
+
+    if (
+      lastItem.index >= allRows.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
       fetchNextPage();
     }
-  }, [entry, hasNextPage, isFetchingNextPage]);
+  }, [
+    hasNextPage,
+    fetchNextPage,
+    allRows.length,
+    isFetchingNextPage,
+    rowVirtualizer.getVirtualItems(),
+  ]);
 
   return (
     <Table>
-      <THead table={table} />
       <TBody>
-        {virtualItems.map((virtualRow) => {
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const isLoaderRow = virtualRow.index > allRows.length - 1;
+
           const row = table.getRowModel().rows[virtualRow.index];
-          const isLast = virtualRow.index === threshold;
-          return <Row ref={isLast ? ref : null} key={row.id} row={row} />;
+          const style = {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: `${virtualRow.size}px`,
+            transform: `translateY(${virtualRow.start}px)`,
+          };
+
+          return (
+            <Fragment key={virtualRow.index}>
+              {isLoaderRow && hasNextPage ? (
+                <LoadingRow style={style} />
+              ) : (
+                <Row row={row} style={style} />
+              )}
+            </Fragment>
+          );
         })}
       </TBody>
     </Table>
