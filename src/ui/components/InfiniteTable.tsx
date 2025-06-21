@@ -5,7 +5,7 @@ import TBody from "./TBody";
 import LoadingRow from "./LoadingRow";
 import TableRow from "./TableRow";
 import type { InfiniteData } from "@tanstack/react-query";
-import type { PageResource } from "../../../types/page_resource";
+import type { PageResource } from "../../types/page_resource";
 import {
   createColumnHelper,
   getCoreRowModel,

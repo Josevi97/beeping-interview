@@ -1,3 +1,5 @@
+import { TableBody as T } from "../../ui/components/shadcn/components/table";
+
 type TBodyProps = React.PropsWithChildren & {
   height?: number;
   style: React.CSSProperties;
@@ -5,7 +7,7 @@ type TBodyProps = React.PropsWithChildren & {
 
 const TBody = (props: TBodyProps) => {
   return (
-    <div
+    <T
       style={{
         ...props.style,
         position: "relative",
@@ -13,7 +15,7 @@ const TBody = (props: TBodyProps) => {
       }}
     >
       {props.children}
-    </div>
+    </T>
   );
 };
 

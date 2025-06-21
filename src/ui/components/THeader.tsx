@@ -1,3 +1,5 @@
+import { TableHead as T } from "../../ui/components/shadcn/components/table";
+
 type THeaderProps = React.PropsWithChildren & {
   onClick?(): void;
 };
@@ -5,12 +7,12 @@ type THeaderProps = React.PropsWithChildren & {
 const THeader = (props: THeaderProps) => {
   if (props.onClick)
     return (
-      <span>
+      <T>
         <button>{props.children}</button>
-      </span>
+      </T>
     );
 
-  return <span>{props.children}</span>;
+  return <T>{props.children}</T>;
 };
 
 export default THeader;

@@ -8,7 +8,9 @@
     "lib": ["dom", "ESNext"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@lib/*": ["src/ui/components/shadcn/lib/*"]
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import type { AcademicWork } from "../academic_work";
-import type { PageResource } from "../../../../types/page_resource";
+import type { PageResource } from "../../../types/page_resource";
 
 const url = "https://api.openalex.org/works";
 

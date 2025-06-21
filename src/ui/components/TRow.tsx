@@ -1,3 +1,5 @@
+import { TableRow as T } from "../../ui/components/shadcn/components/table";
+
 type TRowProps = React.PropsWithChildren & {
   id?: string;
   style?: React.CSSProperties;
@@ -5,9 +7,9 @@ type TRowProps = React.PropsWithChildren & {
 
 const TRow = (props: TRowProps) => {
   return (
-    <div id={props.id} style={props.style}>
+    <T id={props.id} style={props.style}>
       {props.children}
-    </div>
+    </T>
   );
 };
 
