@@ -1,7 +1,7 @@
 type TableProps = React.PropsWithChildren;
 
 const Table = (props: TableProps) => {
-  return <table>{props.children}</table>;
+  return <div role="table">{props.children}</div>;
 };
 
 export default Table;

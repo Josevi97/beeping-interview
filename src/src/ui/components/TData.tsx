@@ -1,7 +1,7 @@
 type TDataProps = React.PropsWithChildren;
 
 const TData = (props: TDataProps) => {
-  return <td>{props.children}</td>;
+  return <span>{props.children}</span>;
 };
 
 export default TData;

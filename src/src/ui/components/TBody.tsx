@@ -1,7 +1,20 @@
-type TBodyProps = React.PropsWithChildren;
+type TBodyProps = React.PropsWithChildren & {
+  height?: number;
+  style: React.CSSProperties;
+};
 
 const TBody = (props: TBodyProps) => {
-  return <tbody>{props.children}</tbody>;
+  return (
+    <div
+      style={{
+        ...props.style,
+        position: "relative",
+        overflowY: "auto",
+      }}
+    >
+      {props.children}
+    </div>
+  );
 };
 
 export default TBody;

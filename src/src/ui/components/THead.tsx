@@ -1,7 +1,7 @@
 type THeadProps = React.PropsWithChildren;
 
 const THead = (props: THeadProps) => {
-  return <thead>{props.children}</thead>;
+  return <div>{props.children}</div>;
 };
 
 export default THead;

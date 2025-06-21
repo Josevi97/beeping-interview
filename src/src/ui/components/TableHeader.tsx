@@ -13,7 +13,7 @@ const TableHeader = <T,>({ table }: TableHeaderProps<T>) => {
       {table.getHeaderGroups().map((headerGroup) => (
         <TRow key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <THeader key={header.id}>
+            <THeader key={header.id} onClick={() => {}}>
               {flexRender(header.column.columnDef.header, header.getContext())}
             </THeader>
           ))}

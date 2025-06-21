@@ -5,9 +5,9 @@ type TRowProps = React.PropsWithChildren & {
 
 const TRow = (props: TRowProps) => {
   return (
-    <tr id={props.id} style={props.style}>
+    <div id={props.id} style={props.style}>
       {props.children}
-    </tr>
+    </div>
   );
 };
 

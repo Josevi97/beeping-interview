@@ -1,7 +1,16 @@
-type THeaderProps = React.PropsWithChildren;
+type THeaderProps = React.PropsWithChildren & {
+  onClick?(): void;
+};
 
 const THeader = (props: THeaderProps) => {
-  return <th>{props.children}</th>;
+  if (props.onClick)
+    return (
+      <span>
+        <button>{props.children}</button>
+      </span>
+    );
+
+  return <span>{props.children}</span>;
 };
 
 export default THeader;

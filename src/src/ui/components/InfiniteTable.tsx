@@ -49,6 +49,7 @@ const InfiniteTable = <T,>({ data, ...props }: InfiniteTableProps<T>) => {
   const table = useReactTable({
     data: allRows,
     columns: columns,
+    manualSorting: true,
     getCoreRowModel: getCoreRowModel(),
   });
 
@@ -83,7 +84,7 @@ const InfiniteTable = <T,>({ data, ...props }: InfiniteTableProps<T>) => {
   return (
     <Table>
       <TableHeader table={table} />
-      <TBody>
+      <TBody style={{ height: rowVirtualizer.getTotalSize() }}>
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const isLoaderRow = virtualRow.index > allRows.length - 1;
 
