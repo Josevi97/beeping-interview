@@ -11,6 +11,7 @@ import Row from "../ui/components/Row";
 import type { AcademicWork } from "../features/models/academic_work";
 import useGetAcademicWorks from "../features/models/hooks/useGetAcademicWorks";
 import LoadingRow from "../ui/components/LoadingRow";
+import THead from "../ui/components/THead";
 
 const helper = createColumnHelper<AcademicWork>();
 const columns = [
@@ -77,6 +78,7 @@ const HomePage = () => {
 
   return (
     <Table>
+      <THead table={table} />
       <TBody>
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const isLoaderRow = virtualRow.index > allRows.length - 1;
