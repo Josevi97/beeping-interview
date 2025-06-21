@@ -14,6 +14,7 @@ import {
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useEffect, useMemo, useRef } from "react";
 import TBody from "./TBody";
+import { cn } from "./shadcn/lib/utils";
 
 type Column<T> = {
   key: AccessorFn<T>;
@@ -22,6 +23,7 @@ type Column<T> = {
 };
 
 type InfiniteTableProps<T> = {
+  className?: string;
   data?: InfiniteData<PageResource<T> | null>;
   threshold?: number;
   overscan?: number;
@@ -92,7 +94,7 @@ const InfiniteTable = <T,>({
   ]);
 
   return (
-    <Table className="h-screen flex flex-col">
+    <Table className={cn("flex", "flex-col", props.className ?? "")}>
       <TableHeader table={table} />
       <TBody ref={bodyRef} className="relative overflow-y-auto flex-grow">
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {

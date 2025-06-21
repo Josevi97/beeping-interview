@@ -7,6 +7,7 @@ const HomePage = () => {
 
   return (
     <InfiniteTable
+      className="h-screen"
       data={data}
       threshold={20}
       overscan={25}
