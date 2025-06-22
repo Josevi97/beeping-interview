@@ -101,6 +101,8 @@ const InfiniteTable = <T,>({
     overscan: overscan,
   });
 
+  const { rows } = table.getRowModel();
+
   useEffect(() => {
     const [lastItem] = [...rowVirtualizer.getVirtualItems()].reverse();
 
@@ -129,7 +131,7 @@ const InfiniteTable = <T,>({
         return { key: s.id, type: s.desc ? "desc" : "asc" };
       }),
     );
-  }, [sorting]);
+  }, [sorting, props.onSortingChanged]);
 
   return (
     <Table className={cn("flex", "flex-col", props.className ?? "")}>
@@ -137,8 +139,8 @@ const InfiniteTable = <T,>({
       <TBody ref={bodyRef} className="relative overflow-y-auto flex-grow">
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const isLoaderRow = virtualRow.index > allRows.length - 1;
+          const row = rows[virtualRow.index];
 
-          const row = table.getRowModel().rows[virtualRow.index];
           // Not sure why this is required. position: absolute is probably a must in order to work with
           // virtualization
           const style: React.CSSProperties = {
